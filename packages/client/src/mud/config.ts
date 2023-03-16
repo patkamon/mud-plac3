@@ -2,8 +2,6 @@ import { SetupContractConfig } from "@latticexyz/std-client";
 import { getBurnerWallet } from "./getBurnerWallet";
 
 const params = new URLSearchParams(window.location.search);
-const str = location.host
-const port = str.substr(str.length - 4)
 
 export const config: SetupContractConfig & { faucetServiceUrl?: string } = {
   // clock: {

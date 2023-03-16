@@ -1,23 +1,16 @@
-import { useMUD } from "./MUDContext";
 import { useMapConfig } from "./useMapConfig";
-import { colorTypes } from "./colorTypes";
-import { useState } from "react";
 import { ethers } from "ethers";
 import  ColorSystem  from "../../contracts/out/ColorSystem.sol/ColorSystem.json";
 
-export const GameBoard = ({pickcolor}) => {
+
+export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
     const { width, height, colorValues } = useMapConfig();
     const rows = new Array(height).fill(0).map((_, i) => i);
     const columns = new Array(width).fill(0).map((_, i) => i);
 
-    const {
-      components: { PlaceConfig },
-      systems,
-      playerEntity,
-    } = useMUD();
 
     async function requestAccount() {
-      await window.ethereum.request({ method: "eth_requestAccounts" });
+      await (window as any).ethereum.request({ method: "eth_requestAccounts" });
     }
 
     
@@ -64,9 +57,9 @@ export const GameBoard = ({pickcolor}) => {
               }}
                     onClick={async (event) => {
               event.preventDefault();
-              if (typeof window.ethereum !== "undefined") {
+              if (typeof (window as any).ethereum !== "undefined") {
                 await requestAccount();
-              const provider = new ethers.providers.Web3Provider(window.ethereum);
+              const provider = new ethers.providers.Web3Provider((window as any).ethereum);
               const ownerSigner = provider.getSigner();
               const contract = new ethers.Contract(
                 "0xC5ee9B6f55bE96AAba03538b7b36f1dd5c8e3810",
