@@ -1,6 +1,6 @@
 import { useMapConfig } from "./useMapConfig";
 import { ethers } from "ethers";
-import  ColorSystem  from "../../contracts/out/ColorSystem.sol/ColorSystem.json";
+import  ColorSystem  from "../artifact/ColorSystem.json";
 
 
 export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
