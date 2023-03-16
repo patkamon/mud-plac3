@@ -23,9 +23,6 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
               (t) => t.x === x && t.y === y
             )?.type;
 
-          //   [ColorType.Darkpurple]: {
-          //     emoji: "bg-[#7E2553]",
-
             return (
             <div
               key={`${x},${y}`}
@@ -74,10 +71,6 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
             }
 
               }
-              // const system = await systems["system.Move"].connect(ownerSigner)
-              //  await system.executeTyped({ x:x, y:y, color:pickcolor});
-              // systems["system.Move"].executeTyped({ x:x, y:y, color:pickcolor});
-              
             }}
             >
              
