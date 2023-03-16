@@ -1,7 +1,5 @@
-# Emojimon
+# Plac3
 
-> Create a Pokémon-inspired on-chain game with [MUD](https://mud.dev/)
+> Using MUD engine [MUD](https://mud.dev/)
 
-### [Read the tutorial on mud.dev &rarr;](https://mud.dev/tutorials/emojimon/)
-
-[![emojimon demo](https://github.com/latticexyz/mud/blob/3fdaa9880639a9546f80fbffdcc4a713178328c1/tutorials/emojimon/images/emojimon-intro.gif?raw=true)](https://mud.dev/tutorials/emojimon/)
+[![plac3](./Screen Shot 2566-03-15 at 23.03.52.png)]()
