@@ -1,19 +1,18 @@
-import { useMUD } from "./MUDContext";
 import { useMapConfig } from "./useMapConfig";
-import { colorTypes } from "./colorTypes";
-import { useState } from "react";
+import { ethers } from "ethers";
+import  ColorSystem  from "../artifact/ColorSystem.json";
 
 
-export const GameBoard = ({pickcolor}) => {
+export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
     const { width, height, colorValues } = useMapConfig();
     const rows = new Array(height).fill(0).map((_, i) => i);
     const columns = new Array(width).fill(0).map((_, i) => i);
 
-    const {
-      components: { PlaceConfig },
-      systems,
-      playerEntity,
-    } = useMUD();
+
+    async function requestAccount() {
+      await (window as any).ethereum.request({ method: "eth_requestAccounts" });
+    }
+
     
   
     return (
@@ -56,12 +55,32 @@ export const GameBoard = ({pickcolor}) => {
                 gridColumn: x + 1,
                 gridRow: y + 1,
               }}
-                    onClick={(event) => {
+                    onClick={async (event) => {
               event.preventDefault();
-              systems["system.Move"].executeTyped({ x:x, y:y, color:pickcolor});
+              if (typeof (window as any).ethereum !== "undefined") {
+                await requestAccount();
+              const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+              const ownerSigner = provider.getSigner();
+              const contract = new ethers.Contract(
+                "0xC5ee9B6f55bE96AAba03538b7b36f1dd5c8e3810",
+                ColorSystem.abi,
+                ownerSigner
+            );
+            try{
+              const tx = await contract.executeTyped({ x:x, y:y, color:pickcolor})
+              console.log(tx)
+            }catch (err){
+              console.log(err)
+            }
+
+              }
+              // const system = await systems["system.Move"].connect(ownerSigner)
+              //  await system.executeTyped({ x:x, y:y, color:pickcolor});
+              // systems["system.Move"].executeTyped({ x:x, y:y, color:pickcolor});
+              
             }}
             >
-                
+             
             </div>
           )})
         )}
