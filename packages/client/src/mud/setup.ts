@@ -1,5 +1,5 @@
 import { setupMUDNetwork } from "@latticexyz/std-client";
-import { SystemTypes } from "contracts/types/SystemTypes";
+import { SystemTypes } from "../../artifact/SystemTypes";
 import { config } from "./config";
 import { contractComponents, clientComponents } from "./components";
 import { world } from "./world";
