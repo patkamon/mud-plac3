@@ -24,7 +24,11 @@ export const setup = async () => {
   const singletonEntity = world.registerEntity({ id: SingletonID });
 
   // Register player entity
-  const address = result.network.connectedAddress.get();
+  // const address = result.network.connectedAddress.get();
+  // const address = result.network.connectedAddress.get();
+  const provider = new ethers.providers.Web3Provider(window.ethereum);
+  const ownerSigner = provider.getSigner();
+  const address = await ownerSigner.getAddress();
   if (!address) throw new Error("Not connected");
 
   const playerEntityId = address as EntityID;
@@ -35,13 +39,26 @@ export const setup = async () => {
     ...clientComponents,
   };
 
+  async function requestAccount() {
+    await window.ethereum.request({ method: "eth_requestAccounts" });
+  }
+
+
   // Request drip from faucet
   if (!config.devMode && config.faucetServiceUrl) {
     const faucet = createFaucetService(config.faucetServiceUrl);
     console.info("[Dev Faucet]: Player Address -> ", address);
 
     const requestDrip = async () => {
-      const balance = await result.network.signer.get()?.getBalance();
+      if (typeof window.ethereum !== "undefined") {
+        await requestAccount();
+      }
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const ownerSigner = provider.getSigner();
+      
+      const balance = await ownerSigner.getBalance();
+
+      // const balance = await result.network.signer.get()?.getBalance();
       console.info(`[Dev Faucet]: Player Balance -> ${balance}`);
       const playerIsBroke = balance?.lte(ethers.utils.parseEther("1"));
       console.info(`[Dev Faucet]: Player is broke -> ${playerIsBroke}`);

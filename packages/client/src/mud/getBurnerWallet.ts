@@ -1,5 +1,7 @@
 import { Wallet } from "ethers";
 
+
+
 export const getBurnerWallet = () => {
   const privateKey = localStorage.getItem("mud:burnerWallet");
   if (privateKey) return new Wallet(privateKey);
@@ -8,3 +10,4 @@ export const getBurnerWallet = () => {
   localStorage.setItem("mud:burnerWallet", burnerWallet.privateKey);
   return burnerWallet;
 };
+

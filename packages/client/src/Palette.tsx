@@ -7,6 +7,7 @@ export const Palette = ({ setcolor }) => {
 
     const colors = new Array(Object.keys(ColorType).filter((v) => isNaN(Number(v))).length +1).fill(0).map((_, i) => i);
 
+
     return (
       <div className="p-2 bg-white fixed left-0">
         {colors.map((_,index)=>{
