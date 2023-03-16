@@ -3,7 +3,7 @@ import { SystemTypes } from "../../artifact/SystemTypes";
 import { config } from "./config";
 import { contractComponents, clientComponents } from "./components";
 import { world } from "./world";
-import { SystemAbis } from "../../artifact/SystemAbis.mjs";
+import { SystemAbis } from "../../artifact/SystemAbis.js";
 import { EntityID } from "@latticexyz/recs";
 import { createFaucetService, SingletonID } from "@latticexyz/network";
 import { ethers } from "ethers";
