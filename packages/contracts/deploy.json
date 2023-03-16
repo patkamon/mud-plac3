@@ -1,0 +1,10 @@
+{
+  "components": ["PlaceConfigComponent"],
+  "initializers": ["PlaceConfigInitializer"],
+  "systems": [
+    {
+      "name": "ColorSystem",
+      "writeAccess": ["PlaceConfigComponent"]
+    }
+  ]
+}
