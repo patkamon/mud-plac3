@@ -42,7 +42,7 @@ export type ColorStructOutput = [number, number, number] & {
 export interface ColorSystemInterface extends utils.Interface {
   functions: {
     "execute(bytes)": FunctionFragment;
-    "executeTyped((uint32,uint32,uint8))": FunctionFragment;
+    "executeTyped(uint256,(uint32,uint32,uint8))": FunctionFragment;
     "owner()": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
   };
@@ -61,7 +61,7 @@ export interface ColorSystemInterface extends utils.Interface {
   ): string;
   encodeFunctionData(
     functionFragment: "executeTyped",
-    values: [ColorStruct]
+    values: [PromiseOrValue<BigNumberish>, ColorStruct]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
@@ -132,6 +132,7 @@ export interface ColorSystem extends BaseContract {
     ): Promise<ContractTransaction>;
 
     executeTyped(
+      entity: PromiseOrValue<BigNumberish>,
       placeConfig: ColorStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<ContractTransaction>;
@@ -150,6 +151,7 @@ export interface ColorSystem extends BaseContract {
   ): Promise<ContractTransaction>;
 
   executeTyped(
+    entity: PromiseOrValue<BigNumberish>,
     placeConfig: ColorStruct,
     overrides?: Overrides & { from?: PromiseOrValue<string> }
   ): Promise<ContractTransaction>;
@@ -168,6 +170,7 @@ export interface ColorSystem extends BaseContract {
     ): Promise<string>;
 
     executeTyped(
+      entity: PromiseOrValue<BigNumberish>,
       placeConfig: ColorStruct,
       overrides?: CallOverrides
     ): Promise<string>;
@@ -198,6 +201,7 @@ export interface ColorSystem extends BaseContract {
     ): Promise<BigNumber>;
 
     executeTyped(
+      entity: PromiseOrValue<BigNumberish>,
       placeConfig: ColorStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<BigNumber>;
@@ -217,6 +221,7 @@ export interface ColorSystem extends BaseContract {
     ): Promise<PopulatedTransaction>;
 
     executeTyped(
+      entity: PromiseOrValue<BigNumberish>,
       placeConfig: ColorStruct,
       overrides?: Overrides & { from?: PromiseOrValue<string> }
     ): Promise<PopulatedTransaction>;

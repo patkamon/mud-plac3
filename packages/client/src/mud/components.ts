@@ -1,6 +1,6 @@
-import { defineNumberComponent } from "@latticexyz/std-client";
 import { world } from "./world";
 import { defineComponent, Type } from "@latticexyz/recs";
+
 
 export const contractComponents = {
   PlaceConfig: defineComponent(
@@ -15,11 +15,15 @@ export const contractComponents = {
       metadata: { contractId: "component.PlaceConfig" },
     }
   ),
-  Counter: defineNumberComponent(world, {
-    metadata: {
-      contractId: "component.Position",
+  Player: defineComponent(world, 
+    {
+      totalPixel: Type.Number,
+      latestTime: Type.Number
     },
-  }),
+    {
+      id: "Player",
+      metadata: { contractId: "component.Player" },
+    }),
 };
 
 export const clientComponents = {};

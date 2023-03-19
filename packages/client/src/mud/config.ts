@@ -3,21 +3,39 @@ import { getBurnerWallet } from "./getBurnerWallet";
 
 const params = new URLSearchParams(window.location.search);
 
+export declare type chainContracts = {
+  chainId: number,
+  worldAddress: string,
+  colorSystemAddress: string,
+  isDev: string,
+  rpc: string,
+  wss: string
+  initialBlockNumber: number
+}
+
+export const Lattice:chainContracts = {
+  worldAddress: "0xC8C8fFFdA9791A978478078Af96B68Ba170AC38e", // latticexyz
+  colorSystemAddress:  "0x11E150fc2f43f53F03870D191C31975DEE5e4Adc", // lattice colorsystem
+  chainId: 4242,
+  isDev: "false",
+  rpc: "https://follower.testnet-chain.linfra.xyz",
+  wss: "wss://follower.testnet-chain.linfra.xyz",
+  initialBlockNumber: 9554308
+}
+
+export const Local:chainContracts ={
+  worldAddress: params.get("worldAddress")!, 
+  colorSystemAddress:  "", 
+  chainId: 31337,
+  isDev: "true",
+  rpc: "http://localhost:8545",
+  wss: "ws://localhost:8545",
+  initialBlockNumber: Number(params.get("initialBlockNumber")) || 0
+}
+
+export const usedchain = Lattice;
+
 export const config: SetupContractConfig & { faucetServiceUrl?: string } = {
-  // clock: {
-  //   period: 1000,
-  //   initialTime: 0,
-  //   syncInterval: 5000,
-  // },
-  // provider: {
-  //   jsonRpcUrl: params.get("rpc") ?? "http://localhost:8545",
-  //   wsRpcUrl: params.get("wsRpc") ?? "ws://localhost:8545",
-  //   chainId: Number(params.get("chainId")) || 31337,
-  // },
-  // privateKey: getBurnerWallet().privateKey,
-  // chainId: Number(params.get("chainId")) || 31337,
-  // snapshotServiceUrl: params.get("snapshot") ?? undefined,
-  // faucetServiceUrl: params.get("faucet") ?? undefined,
   clock: {
     period: 1000,
     initialTime: 0,
@@ -25,20 +43,18 @@ export const config: SetupContractConfig & { faucetServiceUrl?: string } = {
   },
   provider: {
     jsonRpcUrl:
-      params.get("rpc") ?? "https://follower.testnet-chain.linfra.xyz",
-    wsRpcUrl: params.get("wsRpc") ?? "wss://follower.testnet-chain.linfra.xyz",
-    chainId: Number(params.get("chainId")) || 4242,
+      params.get("rpc") ?? usedchain.rpc,
+    wsRpcUrl: params.get("wsRpc") ?? usedchain.wss,
+    chainId: Number(params.get("chainId")) || usedchain.chainId,
   },
   privateKey: getBurnerWallet().privateKey,
-  chainId: Number(params.get("chainId")) || 4242,
+  chainId: Number(params.get("chainId")) || usedchain.chainId,
   snapshotServiceUrl:
     params.get("snapshot") ??
     "https://ecs-snapshot.testnet-mud-services.linfra.xyz",
   faucetServiceUrl:
     params.get("faucet") ?? "https://faucet.testnet-mud-services.linfra.xyz",
-  // initialBlockNumber: Number(params.get("initialBlockNumber")) || 0,
-  initialBlockNumber: 9250179,
-  // worldAddress: params.get("worldAddress")!,
-  worldAddress: "0xf573A8cCe71553D47e8A30E6f0c6292d25ecE945",
-  devMode: params.get("dev") === "false",
+  initialBlockNumber: usedchain.initialBlockNumber,
+  worldAddress: usedchain.worldAddress, // latticexyz
+  devMode: params.get("dev") === usedchain.isDev,
 };

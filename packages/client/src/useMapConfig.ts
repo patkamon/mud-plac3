@@ -2,14 +2,15 @@ import { ethers } from "ethers";
 import { useComponentValue } from "@latticexyz/react";
 import { useMUD } from "./MUDContext";
 import { colorTypes, ColorType } from "./colorTypes";
+import { EntityID } from "@latticexyz/recs";
 
-export const useMapConfig = () => {
+export const useMapConfig = (id: string) => {
   const {
     components: { PlaceConfig },
-    singletonEntity,
+    world
   } = useMUD();
 
-  const placeConfig = useComponentValue(PlaceConfig, singletonEntity);
+  const placeConfig = useComponentValue(PlaceConfig, world.getEntityIndexStrict(id as EntityID));
 
   if (placeConfig == null) {
     throw new Error("game config not set or not ready, only use this hook after loading state === LIVE");

@@ -16,7 +16,7 @@ setup().then((result) => {
   root.render(
     <MUDProvider {...result}>
       <App />
-      <ToastContainer position="bottom-right" draggable={false} theme="dark" />
+      <ToastContainer position="top-center" closeOnClick draggable={false} theme="dark" pauseOnFocusLoss={false} />
       {import.meta.env.DEV ? <ComponentBrowser /> : null}
     </MUDProvider>
   );

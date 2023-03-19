@@ -2,7 +2,6 @@
 pragma solidity >=0.8.0;
 import { BareComponent } from "solecs/BareComponent.sol";
 import { LibTypes } from "solecs/LibTypes.sol";
-import { SingletonID } from "solecs/SingletonID.sol";
 
 uint256 constant ID = uint256(keccak256("component.PlaceConfig"));
 
@@ -10,6 +9,11 @@ struct PlaceConfig {
   uint32 width;
   uint32 height;
   bytes color;
+}
+struct Color {
+  uint32 x;
+  uint32 y;
+  uint8 color;
 }
 
 contract PlaceConfigComponent is BareComponent {
@@ -29,12 +33,12 @@ contract PlaceConfigComponent is BareComponent {
     values[2] = LibTypes.SchemaValue.STRING;
   }
 
-  function set(PlaceConfig memory placeConfig) public {
-    set(SingletonID, abi.encode(placeConfig.width, placeConfig.height, placeConfig.color));
+  function set(uint entity, PlaceConfig memory placeConfig) public {
+    set(entity, abi.encode(placeConfig.width, placeConfig.height, placeConfig.color));
   }
 
-  function getValue() public view returns (PlaceConfig memory) {
-    (uint32 width, uint32 height, bytes memory color) = abi.decode(getRawValue(SingletonID), (uint32, uint32, bytes));
+  function getValue(uint entity) public view returns (PlaceConfig memory) {
+    (uint32 width, uint32 height, bytes memory color) = abi.decode(getRawValue(entity), (uint32, uint32, bytes));
     return PlaceConfig(width, height, color);
   }
 }
