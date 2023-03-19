@@ -1,5 +1,4 @@
 import { InspectData } from "./Gameboard";
-import { ColorType,colorTypes } from "./colorTypes";
 
 
 export const Inspect = ({inspect}: {inspect: InspectData}) => {

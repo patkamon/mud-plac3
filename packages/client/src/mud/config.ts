@@ -14,13 +14,13 @@ export declare type chainContracts = {
 }
 
 export const Lattice:chainContracts = {
-  worldAddress: "0xf573A8cCe71553D47e8A30E6f0c6292d25ecE945", // latticexyz
-  colorSystemAddress:  "0xC5ee9B6f55bE96AAba03538b7b36f1dd5c8e3810", // lattice colorsystem
+  worldAddress: "0xC8C8fFFdA9791A978478078Af96B68Ba170AC38e", // latticexyz
+  colorSystemAddress:  "0x11E150fc2f43f53F03870D191C31975DEE5e4Adc", // lattice colorsystem
   chainId: 4242,
   isDev: "false",
   rpc: "https://follower.testnet-chain.linfra.xyz",
   wss: "wss://follower.testnet-chain.linfra.xyz",
-  initialBlockNumber: 9250179
+  initialBlockNumber: 9554308
 }
 
 export const Local:chainContracts ={
@@ -33,7 +33,7 @@ export const Local:chainContracts ={
   initialBlockNumber: Number(params.get("initialBlockNumber")) || 0
 }
 
-export const usedchain = Local;
+export const usedchain = Lattice;
 
 export const config: SetupContractConfig & { faucetServiceUrl?: string } = {
   clock: {

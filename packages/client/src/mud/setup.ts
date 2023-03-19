@@ -1,11 +1,11 @@
 import { setupMUDNetwork } from "@latticexyz/std-client";
-// import { SystemTypes } from "../../artifact/SystemTypes";
-import { SystemTypes } from "contracts/types/SystemTypes";
+import { SystemTypes } from "../../artifact/SystemTypes";
+// import { SystemTypes } from "contracts/types/SystemTypes";
 import { config } from "./config";
 import { contractComponents, clientComponents } from "./components";
 import { world } from "./world";
-// import { SystemAbis } from "../../artifact/SystemAbis.js";
-import { SystemAbis } from "contracts/types/SystemAbis.mjs";
+import { SystemAbis } from "../../artifact/SystemAbis.js";
+// import { SystemAbis } from "contracts/types/SystemAbis.mjs";
 import { EntityID } from "@latticexyz/recs";
 import { createFaucetService, SingletonID } from "@latticexyz/network";
 import { ethers } from "ethers";

@@ -1,7 +1,7 @@
 import { useMapConfig } from "./useMapConfig";
 import { ethers } from "ethers";
 import  ColorSystem  from "../artifact/ColorSystem.json";
-import { useMUD } from "./MUDContext";
+// import { useMUD } from "./MUDContext";
 import { toast } from "react-toastify";
 import { Inspect } from "./Inspect";
 import { useState } from "react";
@@ -22,10 +22,6 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
     const Map5 = useMapConfig("0x05");
     const Map6 = useMapConfig("0x06");
     const Map7 = useMapConfig("0x07");
-    // const Map8 = useMapConfig("0x08");
-    // const Map9 = useMapConfig("0x09");
-    // const Map10 = useMapConfig("0x10");
-    // const Map11 = useMapConfig("0x11");
     const rows = new Array(height).fill(0).map((_, i) => i);
     const columns = new Array(width).fill(0).map((_, i) => i);
     const rows2 = new Array(Map.height).fill(0).map((_, i) => i);
@@ -42,22 +38,14 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
     const columns7 = new Array(Map6.width).fill(0).map((_, i) => i);
     const rows8 = new Array(Map7.height).fill(0).map((_, i) => i);
     const columns8 = new Array(Map7.width).fill(0).map((_, i) => i);
-    // const rows9 = new Array(Map.height).fill(0).map((_, i) => i);
-    // const columns9 = new Array(Map.width).fill(0).map((_, i) => i);
-    // const rows10 = new Array(Map.height).fill(0).map((_, i) => i);
-    // const columns10 = new Array(Map.width).fill(0).map((_, i) => i);
-    // const rows11 = new Array(Map.height).fill(0).map((_, i) => i);
-    // const columns11 = new Array(Map.width).fill(0).map((_, i) => i);
-    // const rows12 = new Array(Map.height).fill(0).map((_, i) => i);
-    // const columns12 = new Array(Map.width).fill(0).map((_, i) => i);
 
 
     //local
-    const {
-      components: { PlaceConfig },
-      systems,
-      playerEntity,
-    } = useMUD();
+    // const {
+    //   components: { PlaceConfig },
+    //   systems,
+    //   playerEntity,
+    // } = useMUD();
 
   
 
@@ -71,55 +59,88 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
     async function requestAccount() {
       await (window as any).ethereum.request({ method: "eth_requestAccounts" });
     }
-              // deploy
-            //         onClick={async (event) => {
-            //   event.preventDefault();
-            //   if (typeof (window as any).ethereum !== "undefined") {
-            //     await requestAccount();
-            //   const provider = new ethers.providers.Web3Provider((window as any).ethereum);
-            //   const ownerSigner = provider.getSigner();
-            //   const contract = new ethers.Contract(
-            //     "0xC5ee9B6f55bE96AAba03538b7b36f1dd5c8e3810",
-            //     ColorSystem.abi,
-            //     ownerSigner
-            // );
-            // try{
-            //   const tx = await contract.executeTyped({ x:x, y:y, color:pickcolor})
-            //   console.log(tx)
-            // }catch (err){
-            //   console.log(err)
-            // }
-    async function onClickLocal(event: any,entity: number, x: number, y: number, c: string){
+
+    async function delegate(event: any,entity: number, x: number, y: number, c: string){
+      onClickProduct(event, entity, x, y, c)
+    }
+
+    async function onClickProduct(event: any,entity: number, x: number, y: number, c: string){
       event.preventDefault();
       if (pickcolor != 16){
-        console.log(pickcolor)
         const toastId = toast.loading("Coloring…");
-        try {
-                  await systems["system.Move"].executeTyped(entity, { x:x, y:y, color:pickcolor});
+        if (typeof (window as any).ethereum !== "undefined") {
+            await requestAccount();
+            const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+            const ownerSigner = provider.getSigner();
+            const contract = new ethers.Contract(
+                "0x11E150fc2f43f53F03870D191C31975DEE5e4Adc",
+              ColorSystem.abi,
+              ownerSigner
+            );
+            try{
+              await contract.executeTyped(entity,{ x:x, y:y, color:pickcolor})
+              toast.update(toastId, {
+                isLoading: false,
+                type: "success",
+                render: `Done!`,
+                autoClose: 2500,
+                closeButton: true,
+            })
+            }catch (err){
+              const isCooldown = String(err).includes("You still have a cooldown!")
+              if (isCooldown  === true) {
+                toast.update(toastId, {
+                  isLoading: false,
+                  type: "error",
+                  render: `Oh no, you still have cooldown!`,
+                  autoClose: 2000,
+                  closeButton: true,
+                });}else{
                   toast.update(toastId, {
-                      isLoading: false,
-                      type: "success",
-                      render: `Done!`,
-                      autoClose: 2500,
-                      closeButton: true,
+                    isLoading: false,
+                    type: "error",
+                    render: `Something wrong!`,
+                    autoClose: 2000,
+                    closeButton: true,
                   })
-        } catch (err){
-                  const isCooldown = String(err).includes("You still have a cooldown!")
-                  if (isCooldown  === true) {
-                    toast.update(toastId, {
-                      isLoading: false,
-                      type: "error",
-                      render: `Oh no, you still have cooldown!`,
-                      autoClose: 2000,
-                      closeButton: true,
-                    });
-                  }
                 }
-      }else{
-        console.log("spectator mode")
-        setIsInspect({ 'entity':entity,'x': x,'y': y,"color":c})
-      }
-      }
+            }
+    }}else{
+      console.log("spectator mode")
+      setIsInspect({ 'entity':entity,'x': x,'y': y,"color":c})
+    }
+  }
+
+    // async function onClickLocal(event: any,entity: number, x: number, y: number, c: string){
+    //   event.preventDefault();
+    //   if (pickcolor != 16){
+    //     const toastId = toast.loading("Coloring…");
+    //     try {
+    //               await systems["system.Move"].executeTyped(entity, { x:x, y:y, color:pickcolor});
+    //               toast.update(toastId, {
+    //                   isLoading: false,
+    //                   type: "success",
+    //                   render: `Done!`,
+    //                   autoClose: 2500,
+    //                   closeButton: true,
+    //               })
+    //     } catch (err){
+    //               const isCooldown = String(err).includes("You still have a cooldown!")
+    //               if (isCooldown  === true) {
+    //                 toast.update(toastId, {
+    //                   isLoading: false,
+    //                   type: "error",
+    //                   render: `Oh no, you still have cooldown!`,
+    //                   autoClose: 2000,
+    //                   closeButton: true,
+    //                 });
+    //               }
+    //             }
+    //   }else{
+    //     console.log("spectator mode")
+    //     setIsInspect({ 'entity':entity,'x': x,'y': y,"color":c})
+    //   }
+    //   }
     
 
   
@@ -162,7 +183,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
                 gridRow: y + 1,
               }}
 
-            onClick={(e)=> onClickLocal(e,0,x,y,terrain?.emoji as string)}
+            onClick={(e)=> delegate(e,0,x,y,terrain?.emoji as string)}
             >
              
             </div>
@@ -204,7 +225,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
                 gridColumn: x + width,
                 gridRow: y + 1,
               }}
-              onClick={(e)=> onClickLocal(e,1,x,y,terrain?.emoji as string)}
+              onClick={(e)=> delegate(e,1,x,y,terrain?.emoji as string)}
             >
              
             </div>
@@ -247,7 +268,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
                 gridColumn: x + width + width,
                 gridRow: y + 1,
               }}
-              onClick={(e)=> onClickLocal(e,2,x,y,terrain?.emoji as string)}
+              onClick={(e)=> delegate(e,2,x,y,terrain?.emoji as string)}
             >
              
             </div>
@@ -291,7 +312,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
                 gridColumn: x + width + width +width ,
                 gridRow: y + 1,
               }}
-              onClick={(e)=> onClickLocal(e,3,x,y,terrain?.emoji as string)}
+              onClick={(e)=> delegate(e,3,x,y,terrain?.emoji as string)}
             >
              
             </div>
@@ -334,7 +355,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
                 gridColumn: x +1,
                 gridRow: y + height,
               }}
-              onClick={(e)=> onClickLocal(e,4,x,y,terrain?.emoji as string)}
+              onClick={(e)=> delegate(e,4,x,y,terrain?.emoji as string)}
             >
              
             </div>
@@ -377,7 +398,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
                 gridColumn: x + width,
                 gridRow: y + height,
               }}
-              onClick={(e)=> onClickLocal(e,5,x,y,terrain?.emoji as string)}
+              onClick={(e)=> delegate(e,5,x,y,terrain?.emoji as string)}
             >
              
             </div>
@@ -421,7 +442,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
                 gridColumn: x + width + width,
                 gridRow: y + height,
               }}
-              onClick={(e)=> onClickLocal(e,6,x,y,terrain?.emoji as string)}
+              onClick={(e)=> delegate(e,6,x,y,terrain?.emoji as string)}
             >
              
             </div>
@@ -464,7 +485,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
                 gridColumn: x + width + width + width,
                 gridRow: y + height,
               }}
-              onClick={(e)=> onClickLocal(e,7,x,y,terrain?.emoji as string)}
+              onClick={(e)=> delegate(e,7,x,y,terrain?.emoji as string)}
             >
              
             </div>

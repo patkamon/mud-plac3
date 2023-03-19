@@ -7,7 +7,6 @@ import { EntityID } from "@latticexyz/recs";
 export const useMapConfig = (id: string) => {
   const {
     components: { PlaceConfig },
-    // singletonEntity,
     world
   } = useMUD();
 

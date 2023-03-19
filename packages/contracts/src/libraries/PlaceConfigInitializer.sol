@@ -6594,9 +6594,5 @@ library PlaceConfigInitializer {
     placeConfig.set(5, PlaceConfig({ width: width, height: height, color: color }));
     placeConfig.set(6, PlaceConfig({ width: width, height: height, color: color }));
     placeConfig.set(7, PlaceConfig({ width: width, height: height, color: color }));
-    // placeConfig.set(8, PlaceConfig({ width: width, height: height, color: color }));
-    // placeConfig.set(9, PlaceConfig({ width: width, height: height, color: color }));
-    // placeConfig.set(10, PlaceConfig({ width: width, height: height, color: color }));
-    // placeConfig.set(11, PlaceConfig({ width: width, height: height, color: color }));
   }
 }

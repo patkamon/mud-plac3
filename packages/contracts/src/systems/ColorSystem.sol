@@ -16,20 +16,6 @@ contract ColorSystem is System {
     return executeTyped(entity, c);
   }
 
-  // function executeTyped(Color memory placeConfig) public returns (bytes memory) {
-  //   PlaceConfigComponent place = PlaceConfigComponent(getAddressById(components, PlaceConfigComponentID));
-  //   // PlaceConfig memory map = place.getValue();
-  //   // map.color[(placeConfig.y * map.width) + placeConfig.x] = bytes1(placeConfig.color);
-  //   // place.set(map);
-  //   place.set2(placeConfig);
-
-  //   uint entity = addressToEntity(address(0));
-  //   PlayerComponent p = PlayerComponent(getAddressById(components, PlayerComponentID));
-  //   uint256 player = 0 + 1;
-  //   p.set(entity, Player(player, block.timestamp));
-  //   // require(block.timestamp > currentPlayer.latestTime + 5 minutes, "You still have a cooldown!");
-  // }
-
   function executeTyped(uint entity, Color memory placeConfig) public returns (bytes memory) {
     PlaceConfigComponent place = PlaceConfigComponent(getAddressById(components, PlaceConfigComponentID));
     PlaceConfig memory map = place.getValue(entity);
@@ -40,7 +26,7 @@ contract ColorSystem is System {
     PlayerComponent p = PlayerComponent(getAddressById(components, PlayerComponentID));
     Player memory player = p.has(playerEntity) ? p.getValue(playerEntity) : Player(0, 0);
     uint total = player.totalPixel;
-    require(block.timestamp > player.latestTime + 5 minutes, "You still have a cooldown!");
+    require(block.timestamp > player.latestTime + 10 seconds, "You still have a cooldown!");
     p.set(playerEntity, Player(total + 1, block.timestamp));
   }
 }
