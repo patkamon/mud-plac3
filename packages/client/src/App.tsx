@@ -17,7 +17,6 @@ import { optimism} from 'wagmi/chains';
 import { publicProvider } from 'wagmi/providers/public';
 import { Profile } from "./ConnectButton";
 import { Chain } from 'wagmi/chains';
-import { SelectTool } from "./SelectTool";
 
 
 const LatticeChain: Chain = {
