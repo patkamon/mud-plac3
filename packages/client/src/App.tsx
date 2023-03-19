@@ -13,10 +13,11 @@ import {
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { optimism} from 'wagmi/chains';
-import { alchemyProvider } from 'wagmi/providers/alchemy';
+// import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { Profile } from "./ConnectButton";
 import { Chain } from 'wagmi/chains';
+import { SelectTool } from "./SelectTool";
 
 
 const LatticeChain: Chain = {
@@ -47,7 +48,7 @@ const LatticeChain: Chain = {
 const { chains, provider } = configureChains(
   [optimism, LatticeChain],
   [
-    alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }),
+    // alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }),
     publicProvider()
   ]
 );
@@ -64,7 +65,7 @@ const wagmiClient = createClient({
 })
 
 export const App = () => {
-  const [color, setColor] = useState(0);
+  const [color, setColor] = useState(16);
 
   const {
     components: { LoadingState },
@@ -89,7 +90,7 @@ export const App = () => {
         <div >
           
           <div className="fixed top-0 right-0 p-8"><Profile /></div>
-        <Palette setcolor={setColor}/>
+        <Palette pickcolor={color} setcolor={setColor}/>
         <GameBoard pickcolor={color}/>
         </div>
       )}
