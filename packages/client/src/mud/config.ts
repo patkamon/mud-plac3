@@ -23,6 +23,16 @@ export const Lattice:chainContracts = {
   initialBlockNumber: 9554308
 }
 
+export const Mumbai:chainContracts = {
+  worldAddress: "0x423dA7B583ED4D8fe7e2F4824bc6654B73beff91",
+  colorSystemAddress:  "0x3060B21CfAe6D0Cd8A52B7777D9a264d8196814e", 
+  chainId: 80001,
+  isDev: "false",
+  rpc: "https://polygon-mumbai.g.alchemy.com/v2/i0JIYxK_EGtBX5aGG1apX4KuoH7j_7dq",
+  wss: "wss://polygon-mumbai.g.alchemy.com/v2/i0JIYxK_EGtBX5aGG1apX4KuoH7j_7dq",
+  initialBlockNumber: 33378841
+}
+
 export const Local:chainContracts ={
   worldAddress: params.get("worldAddress")!, 
   colorSystemAddress:  "", 
@@ -33,7 +43,7 @@ export const Local:chainContracts ={
   initialBlockNumber: Number(params.get("initialBlockNumber")) || 0
 }
 
-export const usedchain = Lattice;
+export const usedchain = Mumbai;
 
 export const config: SetupContractConfig & { faucetServiceUrl?: string } = {
   clock: {

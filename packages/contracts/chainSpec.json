@@ -1,5 +1,6 @@
 {
-  "chainId": 4242,
-  "rpc": "https://follower.testnet-chain.linfra.xyz",
-  "wsRpc": "wss://follower.testnet-chain.linfra.xyz"
+  "chainId": 80001,
+  "rpc": "https://polygon-mumbai.g.alchemy.com/v2/i0JIYxK_EGtBX5aGG1apX4KuoH7j_7dq",
+  "wsRpc": "wss://polygon-mumbai.g.alchemy.com/v2/i0JIYxK_EGtBX5aGG1apX4KuoH7j_7dq"
 }
+

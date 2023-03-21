@@ -3,14 +3,19 @@ import { ethers } from "ethers";
 import  ColorSystem  from "../artifact/ColorSystem.json";
 // import { useMUD } from "./MUDContext";
 import { toast } from "react-toastify";
-import { Inspect } from "./Inspect";
+import { Inspect, apollo_query } from "./Inspect";
 import { useState } from "react";
+import { usedchain } from "./mud/config";
 
 export interface InspectData {
   entity: number;
   x: number;
   y: number,
   color?: string 
+}
+export interface Detail {
+  caller: string
+  timestamp: Date 
 }
 
 export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
@@ -40,6 +45,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
     const columns8 = new Array(Map7.width).fill(0).map((_, i) => i);
 
 
+
     //local
     // const {
     //   components: { PlaceConfig },
@@ -47,9 +53,45 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
     //   playerEntity,
     // } = useMUD();
 
-  
+
+    // parse byte
+//   console.log(
+//     ethers.utils.defaultAbiCoder.decode(['uint256', 'uint256','bytes'], big)
+// )
+
+// query to address
+// function dec2hex(str : string){ // .toString(16) only works up to 2^53
+//   const dec = str.toString().split('');
+//   const sum = []
+//   const hex = []
+//   let i
+//   let s
+//   while(dec.length){
+//       s = 1 * (dec.shift() as any)
+//       for(i = 0; s || i < sum.length; i++){
+//           s += (sum[i] || 0) * 10
+//           sum[i] = s % 16
+//           s = (s - sum[i]) / 16
+//       }
+//   }
+//   while(sum.length){
+//       hex.push(sum.pop()?.toString(16))
+//   }
+//   return hex.join('')
+// }
+
+//   console.log(
+//     dec2hex("1373933471351055460412464408200194390431149143120")
+//   )
+
+  //address to int to query
+  // const addr = "0xf0a94ec0f27203c399e17d5533a77e00f9813450"
+
+  // console.log(ethers.BigNumber.from(addr))
+  // console.log(BigInt(ethers.BigNumber.from(addr)._hex).toString())
 
     const [isInspect, setIsInspect] = useState<InspectData | null>(null);
+    const [detail, setDetail] = useState<Detail | null>(null);
 
 
 
@@ -72,8 +114,9 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
             await requestAccount();
             const provider = new ethers.providers.Web3Provider((window as any).ethereum);
             const ownerSigner = provider.getSigner();
+   
             const contract = new ethers.Contract(
-                "0x11E150fc2f43f53F03870D191C31975DEE5e4Adc",
+              usedchain.colorSystemAddress,
               ColorSystem.abi,
               ownerSigner
             );
@@ -107,6 +150,20 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
             }
     }}else{
       console.log("spectator mode")
+      // setDetail()
+      apollo_query({ 'entity':entity,'x': x,'y': y,"color":c})
+      .then((data) => {
+        const d = new Date(0)
+        console.log('Subgraph data: ', data.data.colorings[0])
+        d.setUTCSeconds(data.data.colorings[0].blockTimestamp)
+        const caller = data.data.colorings[0].caller.toString()
+        setDetail({"caller": caller, 'timestamp':d})
+      })
+      .catch((err) => {
+        console.log('Error fetching data: ', err)
+        const d = new Date(0)
+        setDetail({"caller": "0x00", 'timestamp':d})
+      })
       setIsInspect({ 'entity':entity,'x': x,'y': y,"color":c})
     }
   }
@@ -492,7 +549,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
           )})
         )}
 
-            {isInspect ?  (<Inspect inspect={isInspect}></Inspect>) : <></>}
+            {isInspect ?  (<Inspect inspect={isInspect} detail={detail}></Inspect>) : <></>}
 
       </div>
     );

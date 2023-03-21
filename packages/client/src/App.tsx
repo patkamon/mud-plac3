@@ -92,7 +92,7 @@ export const App = () => {
         <Palette pickcolor={color} setcolor={setColor}/>
         <GameBoard pickcolor={color}/>
         </div>
-      )}
+      )} 
            </RainbowKitProvider>
     </WagmiConfig>
 

@@ -7,6 +7,7 @@ import { setup } from "./mud/setup";
 import { MUDProvider } from "./MUDContext";
 import { ComponentBrowser } from "./ComponentBrowser";
 
+
 const rootElement = document.getElementById("react-root");
 if (!rootElement) throw new Error("React root not found");
 const root = ReactDOM.createRoot(rootElement);

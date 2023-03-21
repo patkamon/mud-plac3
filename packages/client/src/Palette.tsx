@@ -3,10 +3,13 @@ import { ColorType,colorTypes } from "./colorTypes";
 
 
 
+
 export const Palette = ({pickcolor, setcolor}: {pickcolor: number, setcolor : React.Dispatch<React.SetStateAction<number>>}) => {
 
 
     const colors = new Array(Object.keys(ColorType).filter((v) => isNaN(Number(v))).length +2).fill(0).map((_, i) => i);
+
+
 
 
     return (
@@ -19,6 +22,7 @@ export const Palette = ({pickcolor, setcolor}: {pickcolor: number, setcolor : Re
                 setcolor(index)
               }}
             >
+
                 <div className="flex justify-center text-3xl mt-[2px]">{index == 16 ? "👆" : ""}</div>
             </div>
         })
