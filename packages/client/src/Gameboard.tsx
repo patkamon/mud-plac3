@@ -15,7 +15,7 @@ export interface InspectData {
 }
 export interface Detail {
   caller: string
-  timestamp: Date 
+  timestamp: string
 }
 
 export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
@@ -142,20 +142,21 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
             }
     }}else{
       console.log("spectator mode")
-      const d = new Date(0)
+
       setIsInspect({ 'entity':entity,'x': x,'y': y,"color":c==undefined ? "bg-white" : c })
-      setDetail({"caller": "loading", 'timestamp':d})
+      setDetail({"caller": "loading", 'timestamp':""})
       // setDetail()
       apollo_query({ 'entity':entity,'x': x,'y': y,"color":c})
       .then((data) => {
         console.log('Subgraph data: ', data.data.colorings[0])
+        const d = new Date(0)
         d.setUTCSeconds(data.data.colorings[0].blockTimestamp)
         const caller = data.data.colorings[0].caller.toString()
-        setDetail({"caller": caller, 'timestamp':d})
+        setDetail({"caller": caller, 'timestamp':d.toLocaleString()})
       })
       .catch((err) => {
         console.log('Error fetching data: ', err)
-        setDetail({"caller": "0x00", 'timestamp':d})
+        setDetail({"caller": "0x00", 'timestamp':"Never"})
       })
     }
   }

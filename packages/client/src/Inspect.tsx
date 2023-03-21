@@ -61,12 +61,12 @@ console.log(inspect?.color)
 { detail?.caller != "loading" ? ( 
      <div>
           <div className={`px-6 pt-4 pb-2 flex flex-col font-mono text-2xl ${inspect?.color != "bg-white" && inspect?.color != "bg-[#FFEC27]" && inspect?.color != "bg-[#FFCCAA]" ? "" : "text-gray-700"}`}>
-            <p>painter:{detail?.caller != "0x00" ? detail?.caller.substring(0,4) + "..." + detail?.caller.substring(detail?.caller.length-4,detail?.caller.length): "0x00"}</p>
-            <p>time:{detail?.timestamp != new Date(0) ? detail?.timestamp.toLocaleString() : ""}</p>
+            <p>Painter:{detail?.caller != "0x00" ? " "+detail?.caller.substring(0,4) + "..." + detail?.caller.substring(detail?.caller.length-4,detail?.caller.length): " 0x00"}</p>
+            <p>Timestamp:{detail?.caller != "0x00" ? detail?.timestamp: " Never"}</p>
           </div>
           <div className="px-6 pt-4 pb-2 flex justify-center">
-    <span className="font-mono text-2xl inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">x: {inspect?.x + (80* offsetX)}</span>
-    <span className="font-mono text-2xl inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">y: {inspect?.y + (80* offsetY)}</span>
+    <span className="font-mono text-2xl inline-block bg-gray-200 rounded-full px-3 py-1  font-semibold text-gray-700 mr-2 mb-2">x: {inspect?.x + (80* offsetX)}</span>
+    <span className="font-mono text-2xl inline-block bg-gray-200 rounded-full px-3 py-1  font-semibold text-gray-700 mr-2 mb-2">y: {inspect?.y + (80* offsetY)}</span>
   </div>
   </div>
 
