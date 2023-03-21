@@ -1,9 +1,4 @@
-import { GameBoard } from "./Gameboard";
-import { SyncState } from "@latticexyz/network";
-import { useComponentValue } from "@latticexyz/react";
-import { useMUD } from "./MUDContext";
-import { Palette } from "./Palette";
-import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 //Wagmi
 import '@rainbow-me/rainbowkit/styles.css';
@@ -15,8 +10,10 @@ import { configureChains, createClient, WagmiConfig } from 'wagmi';
 import { optimism} from 'wagmi/chains';
 // import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
-import { Profile } from "./ConnectButton";
 import { Chain } from 'wagmi/chains';
+import { Place } from "./Place";
+import { Leaderboard } from "./Leaderboard";
+import { Search } from "./Search";
 
 
 const LatticeChain: Chain = {
@@ -64,36 +61,18 @@ const wagmiClient = createClient({
 })
 
 export const App = () => {
-  const [color, setColor] = useState(16);
-
-  const {
-    components: { LoadingState },
-    singletonEntity,
-  } = useMUD();
-
-  const loadingState = useComponentValue(LoadingState, singletonEntity, {
-    state: SyncState.CONNECTING,
-    msg: "Connecting",
-    percentage: 0,
-  });
-
   return (
     <div className="w-screen h-screen flex items-center justify-center">
         <WagmiConfig client={wagmiClient}>
       <RainbowKitProvider chains={chains}>
-         {loadingState.state !== SyncState.LIVE ? (
-        <div>
-          {loadingState.msg} ({Math.floor(loadingState.percentage)}%)
-        </div>
-      ) : (
-        <div >
-          
-          <div className="fixed top-0 right-0 p-8"><Profile /></div>
-        <Palette pickcolor={color} setcolor={setColor}/>
-        <GameBoard pickcolor={color}/>
-        </div>
-      )} 
-           </RainbowKitProvider>
+      <BrowserRouter>
+      <Routes>
+        {/* <Route path="leaderboard" element={<Search />} /> */}
+        <Route path="*" element={<Place />}>
+    </Route>
+      </Routes>
+    </BrowserRouter>
+    </RainbowKitProvider>
     </WagmiConfig>
 
     </div>

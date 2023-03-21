@@ -54,10 +54,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
     // } = useMUD();
 
 
-    // parse byte
-//   console.log(
-//     ethers.utils.defaultAbiCoder.decode(['uint256', 'uint256','bytes'], big)
-// )
+
 
 // query to address
 // function dec2hex(str : string){ // .toString(16) only works up to 2^53
@@ -84,11 +81,6 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
 //     dec2hex("1373933471351055460412464408200194390431149143120")
 //   )
 
-  //address to int to query
-  // const addr = "0xf0a94ec0f27203c399e17d5533a77e00f9813450"
-
-  // console.log(ethers.BigNumber.from(addr))
-  // console.log(BigInt(ethers.BigNumber.from(addr)._hex).toString())
 
     const [isInspect, setIsInspect] = useState<InspectData | null>(null);
     const [detail, setDetail] = useState<Detail | null>(null);
@@ -150,10 +142,12 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
             }
     }}else{
       console.log("spectator mode")
+      const d = new Date(0)
+      setIsInspect({ 'entity':entity,'x': x,'y': y,"color":c==undefined ? "bg-white" : c })
+      setDetail({"caller": "loading", 'timestamp':d})
       // setDetail()
       apollo_query({ 'entity':entity,'x': x,'y': y,"color":c})
       .then((data) => {
-        const d = new Date(0)
         console.log('Subgraph data: ', data.data.colorings[0])
         d.setUTCSeconds(data.data.colorings[0].blockTimestamp)
         const caller = data.data.colorings[0].caller.toString()
@@ -161,10 +155,8 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
       })
       .catch((err) => {
         console.log('Error fetching data: ', err)
-        const d = new Date(0)
         setDetail({"caller": "0x00", 'timestamp':d})
       })
-      setIsInspect({ 'entity':entity,'x': x,'y': y,"color":c})
     }
   }
 
