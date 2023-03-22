@@ -385,7 +385,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
         {/* <div className=" overflow-auto"> */}
       <div className="p-2 bg-white overflow-scroll " style={{ transform: "scale("+zoom+")"}}>
 
-        <canvas onClick={(e)=>onClickProduct(e)} style={{  imageRendering: "pixelated" }} width={320} height={160} className="overflow-scroll" ></canvas>
+        <canvas onClick={(e)=>delegate(e)} style={{  imageRendering: "pixelated" }} width={320} height={160} className="overflow-scroll" ></canvas>
 
         </div>
         {/* </div> */}
