@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Detail, InspectData } from "./Gameboard";
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 
@@ -33,34 +32,24 @@ export async function apollo_query(inspect: InspectData){
       entity: inspect.entity.toString()
     }
   })
-  // .then((data) => {
-  //   console.log('Subgraph data: ', data.data.colorings[0])
-  //   // setCaller(data.data.colorings[0].caller)
-  //   d.setUTCSeconds(data.data.colorings[0].blockTimestamp)
-  //   const caller = data.data.colorings[0].caller.toString()
-  //   // setTimestamp(d)
-
-  // })
-  // .catch((err) => {
-  //   console.log('Error fetching data: ', err)
-  // })
 }
    
 
 export const Inspect = ({inspect,detail}: {inspect: InspectData,detail: Detail | null}) => {
 
-  // const [caller, setCaller] = useState("0x00")
-  // const [timestamp, setTimestamp] = useState(new Date(0))
 
   const offsetX = inspect.entity %4;
   const offsetY = Math.floor(inspect.entity /4);
+  console.log(inspect)
 
-console.log(inspect?.color)
-
-    return ( <div  className={`flex flex-col fixed ${inspect?.color} top-1/2 right-4 rounded-lg  ${inspect?.color == 'bg-white' ? "border-gray-500":  "border-white"} border-4  transform  -translate-y-1/2 `}>
+    return ( <div  style={{ backgroundColor: inspect.color }}
+    className={`flex flex-col fixed top-1/2 right-4 rounded-lg  ${inspect?.color == '#ffffff' ? "border-gray-500":  "border-white"} border-4  transform  -translate-y-1/2 `}>
 { detail?.caller != "loading" ? ( 
      <div>
-          <div className={`px-6 pt-4 pb-2 flex flex-col font-mono text-2xl ${inspect?.color != "bg-white" && inspect?.color != "bg-[#FFEC27]" && inspect?.color != "bg-[#FFCCAA]" ? "" : "text-gray-700"}`}>
+          <div style={{
+            color: inspect?.color != "#ffffff" && inspect?.color != "#ffec27" && inspect?.color != "#ffccaa" ? "white": "black"
+          }}
+          className={`px-6 pt-4 pb-2 flex flex-col font-mono text-2xl }`}>
             <p>Painter:{detail?.caller != "0x00" ? " "+detail?.caller.substring(0,4) + "..." + detail?.caller.substring(detail?.caller.length-4,detail?.caller.length): " 0x00"}</p>
             <p>Timestamp:{detail?.caller != "0x00" ? detail?.timestamp: " Never"}</p>
           </div>

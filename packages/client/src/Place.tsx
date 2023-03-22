@@ -31,8 +31,9 @@ export const Place = () => {
       ) : (
         <div>
           
-          <div className="fixed top-0 right-0 p-8">
-            <Profile /></div>
+          <div className="fixed top-0 right-0 p-8 z-10">
+            <Profile  />
+          </div>
             <Search/>
         <Palette pickcolor={color} setcolor={setColor}/>
         <GameBoard pickcolor={color}/>
