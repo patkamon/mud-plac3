@@ -3,17 +3,14 @@ import { ColorType,colorTypes } from "./colorTypes";
 
 
 
-
 export const Palette = ({pickcolor, setcolor}: {pickcolor: number, setcolor : React.Dispatch<React.SetStateAction<number>>}) => {
 
 
     const colors = new Array(Object.keys(ColorType).filter((v) => isNaN(Number(v))).length +2).fill(0).map((_, i) => i);
 
 
-
-
     return (
-      <div className="flex flex-col fixed top-1/2 left-0 z-10 transform  -translate-y-1/2 ">
+      <div className="flex flex-col absolute top-1/2 left-0  transform  -translate-y-1/2 ">
         <SelectTool pickcolor={pickcolor}/>
         <div className="p-2 bg-white">
         {colors.map((_,index)=>{
@@ -22,7 +19,6 @@ export const Palette = ({pickcolor, setcolor}: {pickcolor: number, setcolor : Re
                 setcolor(index)
               }}
             >
-
                 <div className="flex justify-center text-3xl mt-[2px]">{index == 16 ? "👆" : ""}</div>
             </div>
         })

@@ -12,8 +12,6 @@ export const useMapConfig = (id: string) => {
 
   const placeConfig = useComponentValue(PlaceConfig, world.getEntityIndexStrict(id as EntityID));
 
-
-  
   if (placeConfig == null) {
     throw new Error("game config not set or not ready, only use this hook after loading state === LIVE");
   }
