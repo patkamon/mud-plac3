@@ -4,7 +4,7 @@ import  ColorSystem  from "../artifact/ColorSystem.json";
 // import { useMUD } from "./MUDContext";
 import { toast } from "react-toastify";
 import { Inspect, apollo_query } from "./Inspect";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { usedchain } from "./mud/config";
 
 export interface InspectData {
@@ -19,8 +19,8 @@ export interface Detail {
 }
 
 export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
-    const { width, height, colorValues } = useMapConfig("0x00");
-    const Map = useMapConfig("0x01");
+    const Map0 = useMapConfig("0x00");
+    const Map1 = useMapConfig("0x01");
     const Map2 = useMapConfig("0x02");
     const Map3 = useMapConfig("0x03");
     const Map4 = useMapConfig("0x04");
@@ -67,7 +67,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
 
     const [isInspect, setIsInspect] = useState<InspectData | null>(null);
     const [detail, setDetail] = useState<Detail | null>(null);
-    const [zoom, setZoom] = useState(3);
+    const [zoom, setZoom] = useState(5);
 
     function componentToHex(c:number) {
       const hex = c.toString(16);
@@ -77,14 +77,6 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
     function rgbToHex(r:number, g:number, b:number) {
       return "#"+componentToHex(r) + componentToHex(g) + componentToHex(b) ;
     }
-
-    // function getCursorPosition(event: any) {
-
-    // }
-  // const canvas = document.querySelector('canvas')
-//     canvas!.addEventListener('mousedown', function(e) {
-//     getCursorPosition(canvas, e)
-// })
 
 
     async function requestAccount() {
@@ -149,7 +141,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
       setDetail({"caller": "loading", 'timestamp':""})
       const ctx = canvas!.getContext('2d')
       const data = ctx?.getImageData(fullX ,fullY,1,1).data
-      const color = rgbToHex(data[0],data[1],data[2])
+      const color = rgbToHex(data![0],data![1],data![2])
       setIsInspect({entity: entity, x: x ,y: y,color: color})
 
       apollo_query({ 'entity':entity,'x': x,'y': y,"color":""})
@@ -198,7 +190,6 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
     //   }
     //   }
 
-    console.log(colorValues[5198])
 
 
     useEffect(() => {
@@ -211,10 +202,10 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
         // Iterate through every pixel
       for (let i = 0; i < imageData.data.length; i += 4) {
         // Modify pixel data
-        if (colorValues[i/4] != undefined && colorValues[i/4].type != null ){
-          imageData.data[i + 0] = colorValues[i/4].type?.r as number // R value
-          imageData.data[i + 1] = colorValues[i/4].type?.g as number // G value
-          imageData.data[i + 2] = colorValues[i/4].type?.b as number // B value
+        if (Map0.colorValues[i/4] != undefined && Map0.colorValues[i/4].type != null ){
+          imageData.data[i + 0] = Map0.colorValues[i/4].type?.r as number // R value
+          imageData.data[i + 1] = Map0.colorValues[i/4].type?.g as number // G value
+          imageData.data[i + 2] = Map0.colorValues[i/4].type?.b as number // B value
         }
         else{
           imageData.data[i + 0] = 255 // R value
@@ -224,7 +215,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
         imageData.data[i + 3] = 255; // A value
         }
         ctx!.putImageData(imageData,0,0);
-    }, [colorValues])
+    }, [Map0.colorValues])
 
     useEffect(() => {
       const canvas = document.getElementsByTagName('canvas')[0];
@@ -236,10 +227,10 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
         // Iterate through every pixel
       for (let i = 0; i < imageData.data.length; i += 4) {
         // Modify pixel data
-        if (Map.colorValues[i/4] != undefined){
-          imageData.data[i + 0] = Map.colorValues[i/4].type?.r as number // R value
-          imageData.data[i + 1] = Map.colorValues[i/4].type?.g as number // G value
-          imageData.data[i + 2] = Map.colorValues[i/4].type?.b as number // B value
+        if (Map1.colorValues[i/4] != undefined){
+          imageData.data[i + 0] = Map1.colorValues[i/4].type?.r as number // R value
+          imageData.data[i + 1] = Map1.colorValues[i/4].type?.g as number // G value
+          imageData.data[i + 2] = Map1.colorValues[i/4].type?.b as number // B value
         }
         else{
           imageData.data[i + 0] = 244 // R value
@@ -249,7 +240,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
         imageData.data[i + 3] = 255; // A value
         }
         ctx!.putImageData(imageData,80,0);
-    }, [Map])
+    }, [Map1])
 
     useEffect(() => {
       const canvas = document.getElementsByTagName('canvas')[0];

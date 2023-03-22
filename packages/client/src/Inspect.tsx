@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Detail, InspectData } from "./Gameboard";
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
 
@@ -33,24 +32,11 @@ export async function apollo_query(inspect: InspectData){
       entity: inspect.entity.toString()
     }
   })
-  // .then((data) => {
-  //   console.log('Subgraph data: ', data.data.colorings[0])
-  //   // setCaller(data.data.colorings[0].caller)
-  //   d.setUTCSeconds(data.data.colorings[0].blockTimestamp)
-  //   const caller = data.data.colorings[0].caller.toString()
-  //   // setTimestamp(d)
-
-  // })
-  // .catch((err) => {
-  //   console.log('Error fetching data: ', err)
-  // })
 }
    
 
 export const Inspect = ({inspect,detail}: {inspect: InspectData,detail: Detail | null}) => {
 
-  // const [caller, setCaller] = useState("0x00")
-  // const [timestamp, setTimestamp] = useState(new Date(0))
 
   const offsetX = inspect.entity %4;
   const offsetY = Math.floor(inspect.entity /4);

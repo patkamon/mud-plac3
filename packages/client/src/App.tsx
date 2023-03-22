@@ -7,13 +7,11 @@ import {
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createClient, WagmiConfig } from 'wagmi';
-import { optimism} from 'wagmi/chains';
+import { optimism, polygonMumbai} from 'wagmi/chains';
 // import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { Chain } from 'wagmi/chains';
 import { Place } from "./Place";
-import { Leaderboard } from "./Leaderboard";
-import { Search } from "./Search";
 
 
 const LatticeChain: Chain = {
@@ -39,10 +37,33 @@ const LatticeChain: Chain = {
   testnet: true,
 };
 
+// const MumbaiChain: Chain = {
+//   id: 4242,
+//   name: '',
+//   network: 'lattice',
+//   nativeCurrency: {
+//     decimals: 18,
+//     name: 'Ethereum',
+//     symbol: 'eth',
+//   },
+//   rpcUrls: {
+//     default: {
+//       http: ['https://follower.testnet-chain.linfra.xyz'],
+//     },
+//     public: {
+//       http: ['https://follower.testnet-chain.linfra.xyz'],
+//     },
+//   },
+//   blockExplorers: {
+//     default: { name: 'explorer', url: 'https://explorer.testnet-chain.linfra.xyz' },
+//   },
+//   testnet: true,
+// };
+
 
 
 const { chains, provider } = configureChains(
-  [optimism, LatticeChain],
+  [optimism, LatticeChain, polygonMumbai],
   [
     // alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }),
     publicProvider()
