@@ -13,7 +13,7 @@ export const Palette = ({pickcolor, setcolor}: {pickcolor: number, setcolor : Re
 
 
     return (
-      <div className="flex flex-col fixed top-1/2 left-0  transform  -translate-y-1/2 ">
+      <div className="flex flex-col fixed top-1/2 left-0 z-10 transform  -translate-y-1/2 ">
         <SelectTool pickcolor={pickcolor}/>
         <div className="p-2 bg-white">
         {colors.map((_,index)=>{

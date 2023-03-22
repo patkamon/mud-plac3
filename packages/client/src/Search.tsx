@@ -31,7 +31,12 @@ function onClose(e: any){
 
 function apollo_query(addr: string){
     //address to int to query
-    const entity = BigInt(ethers.BigNumber.from(addr)._hex).toString()
+    let entity = ""
+    try{
+        entity = BigInt(ethers.BigNumber.from(addr)._hex).toString()
+    }catch{
+        entity = "addr"
+    }
 
 
     const APIURL = 'https://api.studio.thegraph.com/query/44126/demo-plac3/1'
@@ -77,7 +82,7 @@ function apollo_query(addr: string){
 
 return (
     <div>
-    <form onSubmit={e=>onClick(e)} className="fixed top-4 left-1/2  transform  -translate-x-1/2">   
+    <form onSubmit={e=>onClick(e)} className="fixed top-4 z-10 left-1/2  transform  -translate-x-1/2">   
     <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
     <div className="relative">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
