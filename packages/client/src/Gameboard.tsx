@@ -40,25 +40,25 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
 
 
 // query to address
-// function dec2hex(str : string){ // .toString(16) only works up to 2^53
-//   const dec = str.toString().split('');
-//   const sum = []
-//   const hex = []
-//   let i
-//   let s
-//   while(dec.length){
-//       s = 1 * (dec.shift() as any)
-//       for(i = 0; s || i < sum.length; i++){
-//           s += (sum[i] || 0) * 10
-//           sum[i] = s % 16
-//           s = (s - sum[i]) / 16
-//       }
-//   }
-//   while(sum.length){
-//       hex.push(sum.pop()?.toString(16))
-//   }
-//   return hex.join('')
-// }
+function dec2hex(str : string){ // .toString(16) only works up to 2^53
+  const dec = str.toString().split('');
+  const sum = []
+  const hex = []
+  let i
+  let s
+  while(dec.length){
+      s = 1 * (dec.shift() as any)
+      for(i = 0; s || i < sum.length; i++){
+          s += (sum[i] || 0) * 10
+          sum[i] = s % 16
+          s = (s - sum[i]) / 16
+      }
+  }
+  while(sum.length){
+      hex.push(sum.pop()?.toString(16))
+  }
+  return hex.join('')
+}
 
 //   console.log(
 //     dec2hex("1373933471351055460412464408200194390431149143120")
@@ -87,6 +87,8 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
       onClickProduct(event)
     }
 
+
+
     async function onClickProduct(event: any){
       event.preventDefault();
       const canvas = document.querySelector('canvas')
@@ -96,7 +98,6 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
       const x = fullX%80
       const y = fullY%80
       const entity = Math.floor(fullX/80) + (Math.floor(fullY/80)*4)
-      console.log(x,y,fullX,fullY,entity)
       if (pickcolor != 16){
         const toastId = toast.loading("Coloring…");
         if (typeof (window as any).ethereum !== "undefined") {
@@ -227,7 +228,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
         // Iterate through every pixel
       for (let i = 0; i < imageData.data.length; i += 4) {
         // Modify pixel data
-        if (Map1.colorValues[i/4] != undefined){
+        if (Map1.colorValues[i/4] != undefined && Map1.colorValues[i/4].type != null){
           imageData.data[i + 0] = Map1.colorValues[i/4].type?.r as number // R value
           imageData.data[i + 1] = Map1.colorValues[i/4].type?.g as number // G value
           imageData.data[i + 2] = Map1.colorValues[i/4].type?.b as number // B value
@@ -240,7 +241,7 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
         imageData.data[i + 3] = 255; // A value
         }
         ctx!.putImageData(imageData,80,0);
-    }, [Map1])
+    }, [Map1.colorValues])
 
     useEffect(() => {
       const canvas = document.getElementsByTagName('canvas')[0];
@@ -378,26 +379,41 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
         imageData.data[i + 3] = 255; // A value
         }
         ctx!.putImageData(imageData,240,80);
-    }, [Map6])
+    }, [Map7])
 
     return (
-      <div className="">
+      <div className="pr-44">
+              
         {/* <div className=" overflow-auto"> */}
-      <div className="p-2 bg-white overflow-scroll " style={{ transform: "scale("+zoom+")"}}>
+      <div className="p-2 bg-white overflow-scroll " style={{ 
+          transform: "scale("+zoom+")" ,
+          transformOrigin: "10% 10%",
+          boxSizing: "border-box",
+          border: "1px solid black",
+          }}>
 
-        <canvas onClick={(e)=>delegate(e)} style={{  imageRendering: "pixelated" }} width={320} height={160} className="overflow-scroll" ></canvas>
+        <canvas onClick={(e)=>delegate(e)} style={{  
+          imageRendering: "pixelated",
+          overflow: "hidden"
+        }} 
+         >
+                     {/* <canvas className="bg-blue-100" width={60} height={60}> </canvas> */}
+
+         </canvas>
+
+
 
         </div>
         {/* </div> */}
-            {isInspect ?  (<Inspect inspect={isInspect} detail={detail}></Inspect>) : <></>}
+            {isInspect && pickcolor == 16 ?  (<Inspect inspect={isInspect} detail={detail}></Inspect>) : <></>}
       
       {/* range */}
           <div className="flex flex-col">
 {/* <label htmlFor="steps-range" className="z-10 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Range steps</label> */}
-<input id="steps-range" type="range" min="1" max="15" value={zoom} onChange={event => setZoom(parseInt(event.target.value))} step="1" className="z-10 w-1/3  h-2 fixed bottom-10 left-1/2  transform  -translate-x-1/2  bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"/>
+<input id="steps-range" type="range" min="1" max="19" value={zoom} onChange={event => setZoom(parseInt(event.target.value))} step="1" className="z-10 w-1/3  h-2 fixed bottom-10 left-1/2  transform  -translate-x-1/2  bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"/>
 
           </div>
-
+  
 
       </div>
  

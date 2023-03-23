@@ -49,8 +49,11 @@ export const Inspect = ({inspect,detail}: {inspect: InspectData,detail: Detail |
           <div style={{
             color: inspect?.color != "#ffffff" && inspect?.color != "#ffec27" && inspect?.color != "#ffccaa" ? "white": "black"
           }}
-          className={`px-6 pt-4 pb-2 flex flex-col font-mono text-2xl }`}>
-            <p>Painter:{detail?.caller != "0x00" ? " "+detail?.caller.substring(0,4) + "..." + detail?.caller.substring(detail?.caller.length-4,detail?.caller.length): " 0x00"}</p>
+          className={`px-6 pt-4 pb-2 flex flex-col font-mono text-lg }`}>
+            <p>Painter:{detail?.caller != "0x00" ? 
+              // " "+detail?.caller.substring(0,4) + "..." + detail?.caller.substring(detail?.caller.length-4,detail?.caller.length) 
+              detail?.caller
+              : " 0x00"}</p>
             <p>Timestamp:{detail?.caller != "0x00" ? detail?.timestamp: " Never"}</p>
           </div>
           <div className="px-6 pt-4 pb-2 flex justify-center">
