@@ -44,7 +44,7 @@ function apollo_query(addr: string){
     const query = `
     query($compo: String, $entity:String) {
         componentValueSets(first: 1 orderBy:blockTimestamp orderDirection:desc
-            where:{component: $compo 
+            where:{ component: $compo 
               entity: $entity 
           }
         ) {
@@ -64,7 +64,7 @@ function apollo_query(addr: string){
     .query({
       query: gql(query),
       variables:{
-        compo: "0x7d731fcb6d6732c0572f82d888a685cc0ff6834c",
+        compo: usedchain.playerCompo,
         entity: entity
       }
     }).then((data)=>{

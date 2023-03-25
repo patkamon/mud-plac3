@@ -12,8 +12,9 @@ export declare type chainContracts = {
   colorSystemAddress: string,
   isDev: string,
   rpc: string,
-  wss: string
-  initialBlockNumber: number
+  wss: string,
+  initialBlockNumber: number,
+  playerCompo?: string
 }
 
 
@@ -36,7 +37,8 @@ export const Mumbai:chainContracts = {
   isDev: "false",
   rpc: "https://polygon-mumbai.g.alchemy.com/v2/i0JIYxK_EGtBX5aGG1apX4KuoH7j_7dq",
   wss: "wss://polygon-mumbai.g.alchemy.com/v2/i0JIYxK_EGtBX5aGG1apX4KuoH7j_7dq",
-  initialBlockNumber: 33544015
+  initialBlockNumber: 33544015,
+  playerCompo: "0x919b4DdFa95Ae46DAfE2DC90a9A309b979Ce0b0e"
 }
 
 export const Optimism:chainContracts = {
@@ -67,11 +69,12 @@ export const Gnosis:chainContracts ={
   isDev: "false",
   rpc: "https://rpc.gnosischain.com/",
   wss: "wss://rpc.gnosischain.com/wss",
-  initialBlockNumber: 27115236
+  initialBlockNumber: 27115236,
+  playerCompo: "0xa9fd39524650aB6c881B4709828dDF0A2314bDbF"
 }
 
 
-const chainid = -1 || (window as any).ethereum.networkVersion;
+const chainid =  (window as any).ethereum.networkVersion  || -1;
 
 export const usedchain = chainid == 80001 ? Mumbai : chainid == 10 ? Optimism : chainid == 100 ? Gnosis : Lattice
 
