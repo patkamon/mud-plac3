@@ -9,7 +9,7 @@ import { ColorType as Z } from "../ColorType.sol";
 uint256 constant ID = uint256(keccak256("system.Move"));
 
 contract ColorSystem is System {
-  event Coloring(address caller, uint32 x, uint32 y, uint entity, uint timestamp, uint8 color);
+  event Coloring(address caller, uint32 x, uint32 y, uint entity, uint8 color);
 
   constructor(IWorld _world, address _components) System(_world, _components) {}
 
@@ -31,6 +31,6 @@ contract ColorSystem is System {
     require(block.timestamp > player.latestTime + 5 minutes, "You still have a cooldown!");
     p.set(playerEntity, Player(total + 1, block.timestamp));
 
-    emit Coloring(msg.sender, placeConfig.x, placeConfig.y, entity, block.timestamp, placeConfig.color);
+    emit Coloring(msg.sender, placeConfig.x, placeConfig.y, entity, placeConfig.color);
   }
 }

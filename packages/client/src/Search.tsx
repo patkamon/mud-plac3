@@ -37,7 +37,7 @@ function apollo_query(addr: string){
     }catch{
         entity = "addr"
     }
-
+    
 
     const APIURL = 'https://api.studio.thegraph.com/query/44126/demo-plac3/1'
     const query = `
@@ -73,7 +73,7 @@ function apollo_query(addr: string){
         console.log(parseInt(parse[0]._hex,16))
 
         setMetadata({"address": search,"timestamp":d,totalPixel:parseInt(parse[0]._hex,16)  })
-        console.log({"address": search,"timestamp":d,totalPixel:parseInt(parse[0]._hex,16)  })
+        // console.log({"address": search,"timestamp":d,totalPixel:parseInt(parse[0]._hex,16)  })
     }).catch((err)=>{
         console.log(err)
         setMetadata({"address": search,"timestamp":d,totalPixel:0  })

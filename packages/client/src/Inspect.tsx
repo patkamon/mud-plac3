@@ -1,10 +1,11 @@
 import { Detail, InspectData } from "./Gameboard";
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client'
+import { usedchain } from "./mud/config";
 
 
 export async function apollo_query(inspect: InspectData){
 
-  const APIURL = 'https://api.studio.thegraph.com/query/44126/demo-plac3/1'
+  const APIURL = usedchain.graphURL
   const query = `
   query($x: String, $y: String, $entity: String) {
     colorings(first: 1 orderBy:blockTimestamp orderDirection:desc where: {x:$x y:$y entity:$entity}) {
@@ -18,11 +19,7 @@ export async function apollo_query(inspect: InspectData){
     cache: new InMemoryCache()
   })
 
-  console.log({
-    x: inspect?.x.toString(),
-    y: inspect?.y.toString(),
-    entity: inspect.entity.toString()
-  })
+
   return client
   .query({
     query: gql(query),
@@ -34,6 +31,32 @@ export async function apollo_query(inspect: InspectData){
   })
 }
    
+export async function apollo_query_time(caller: string){
+
+  const APIURL = usedchain.graphURL
+  const query = `
+  query($caller: String) {
+    colorings(first: 1 orderBy: blockTimestamp orderDirection: desc where: {caller: $caller}) {
+      blockTimestamp
+    }
+  }
+    `
+  const client = new ApolloClient({
+    uri: APIURL,
+    cache: new InMemoryCache()
+  })
+
+
+  return client
+  .query({
+    query: gql(query),
+    variables:{
+      caller: caller,
+    }
+  })
+}
+   
+
 
 export const Inspect = ({inspect,detail}: {inspect: InspectData,detail: Detail | null}) => {
 
@@ -50,12 +73,16 @@ export const Inspect = ({inspect,detail}: {inspect: InspectData,detail: Detail |
             color: inspect?.color != "#ffffff" && inspect?.color != "#ffec27" && inspect?.color != "#ffccaa" ? "white": "black"
           }}
           className={`px-6 pt-4 pb-2 flex flex-col font-mono text-lg }`}>
-            <p>Painter:{detail?.caller != "0x00" ? 
+            
+            {usedchain.graphURL == undefined ? <i className="text-red-400">** This chain is not <br/> support the graph **</i> : <><p>Painter:{detail?.caller != "0x00" ? 
               // " "+detail?.caller.substring(0,4) + "..." + detail?.caller.substring(detail?.caller.length-4,detail?.caller.length) 
               detail?.caller
               : " 0x00"}</p>
             <p>Timestamp:{detail?.caller != "0x00" ? detail?.timestamp: " Never"}</p>
+            </>
+            }
           </div>
+      
           <div className="px-6 pt-4 pb-2 flex justify-center">
     <span className="font-mono text-2xl inline-block bg-gray-200 rounded-full px-3 py-1  font-semibold text-gray-700 mr-2 mb-2">x: {inspect?.x + (80* offsetX)}</span>
     <span className="font-mono text-2xl inline-block bg-gray-200 rounded-full px-3 py-1  font-semibold text-gray-700 mr-2 mb-2">y: {inspect?.y + (80* offsetY)}</span>

@@ -22,6 +22,8 @@ export const Place = () => {
     percentage: 0,
   });
 
+ 
+
   return (
     <div>
     {loadingState.state !== SyncState.LIVE ? (

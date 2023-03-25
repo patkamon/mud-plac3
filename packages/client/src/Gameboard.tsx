@@ -3,7 +3,7 @@ import { ethers } from "ethers";
 import  ColorSystem  from "../artifact/ColorSystem.json";
 // import { useMUD } from "./MUDContext";
 import { toast } from "react-toastify";
-import { Inspect, apollo_query } from "./Inspect";
+import { Inspect, apollo_query, apollo_query_time } from "./Inspect";
 import { useEffect, useState } from "react";
 import { usedchain } from "./mud/config";
 
@@ -40,29 +40,26 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
 
 
 // query to address
-function dec2hex(str : string){ // .toString(16) only works up to 2^53
-  const dec = str.toString().split('');
-  const sum = []
-  const hex = []
-  let i
-  let s
-  while(dec.length){
-      s = 1 * (dec.shift() as any)
-      for(i = 0; s || i < sum.length; i++){
-          s += (sum[i] || 0) * 10
-          sum[i] = s % 16
-          s = (s - sum[i]) / 16
-      }
-  }
-  while(sum.length){
-      hex.push(sum.pop()?.toString(16))
-  }
-  return hex.join('')
-}
+// function dec2hex(str : string){ // .toString(16) only works up to 2^53
+//   const dec = str.toString().split('');
+//   const sum = []
+//   const hex = []
+//   let i
+//   let s
+//   while(dec.length){
+//       s = 1 * (dec.shift() as any)
+//       for(i = 0; s || i < sum.length; i++){
+//           s += (sum[i] || 0) * 10
+//           sum[i] = s % 16
+//           s = (s - sum[i]) / 16
+//       }
+//   }
+//   while(sum.length){
+//       hex.push(sum.pop()?.toString(16))
+//   }
+//   return hex.join('')
+// }
 
-//   console.log(
-//     dec2hex("1373933471351055460412464408200194390431149143120")
-//   )
 
 
     const [isInspect, setIsInspect] = useState<InspectData | null>(null);
@@ -83,9 +80,15 @@ function dec2hex(str : string){ // .toString(16) only works up to 2^53
       await (window as any).ethereum.request({ method: "eth_requestAccounts" });
     }
 
+    (window as any).ethereum.on('chainChanged', () => {
+      window.location.reload();
+    });
+
     async function delegate(event: any){
       onClickProduct(event)
     }
+
+
 
 
 
@@ -101,43 +104,59 @@ function dec2hex(str : string){ // .toString(16) only works up to 2^53
       if (pickcolor != 16){
         const toastId = toast.loading("Coloring…");
         if (typeof (window as any).ethereum !== "undefined") {
-            await requestAccount();
-            const provider = new ethers.providers.Web3Provider((window as any).ethereum);
-            const ownerSigner = provider.getSigner();
-   
-            const contract = new ethers.Contract(
-              usedchain.colorSystemAddress,
-              ColorSystem.abi,
-              ownerSigner
-            );
-            try{
-              await contract.executeTyped(entity,{ x:x, y:y, color:pickcolor})
+            if ((window as any).ethereum.networkVersion !== usedchain.chainId.toString()){
               toast.update(toastId, {
                 isLoading: false,
-                type: "success",
-                render: `Done!`,
-                autoClose: 2500,
+                type: "error",
+                render: `This is not correct chain!`,
+                autoClose: 2000,
                 closeButton: true,
-            })
-            }catch (err){
-              const isCooldown = String(err).includes("You still have a cooldown!")
-              if (isCooldown  === true) {
+              })
+            } else{
+              await requestAccount();
+              const provider = new ethers.providers.Web3Provider((window as any).ethereum);
+              const ownerSigner = provider.getSigner();
+    
+            
+              const contract = new ethers.Contract(
+                usedchain.colorSystemAddress,
+                ColorSystem.abi,
+                ownerSigner
+              );
+              try{
+                await contract.executeTyped(entity,{ x:x, y:y, color:pickcolor})
                 toast.update(toastId, {
                   isLoading: false,
-                  type: "error",
-                  render: `Oh no, you still have cooldown!`,
-                  autoClose: 2000,
+                  type: "success",
+                  render: `Done!`,
+                  autoClose: 2500,
                   closeButton: true,
-                });}else{
-                  toast.update(toastId, {
+              })
+              }catch (err){
+                console.log(err)
+                const address = await provider.getSigner().getAddress()
+                apollo_query_time(address).then((data)=>{
+                    const now = Math.floor(Date.now()/1000);
+                    const timeoff = parseInt(data.data.colorings[0].blockTimestamp)+ 300 - now 
+                    toast.update(toastId, {
                     isLoading: false,
                     type: "error",
-                    render: `Something wrong!`,
+                    render: `Oh no, wait for cooldown ${timeoff}s!`,
                     autoClose: 2000,
                     closeButton: true,
                   })
-                }
-            }
+                }).catch((e)=>{
+                  console.log(e)
+                  toast.update(toastId, {
+                          isLoading: false,
+                          type: "error",
+                          render: `Something wrong !`,
+                          autoClose: 2000,
+                          closeButton: true,
+                        })
+                })
+              }
+          }
     }}else{
       setDetail({"caller": "loading", 'timestamp':""})
       const ctx = canvas!.getContext('2d')
@@ -147,7 +166,7 @@ function dec2hex(str : string){ // .toString(16) only works up to 2^53
 
       apollo_query({ 'entity':entity,'x': x,'y': y,"color":""})
       .then((data) => {
-        console.log('Subgraph data: ', data.data.colorings[0])
+        // console.log('Subgraph data: ', data.data.colorings[0])
         const d = new Date(0)
         d.setUTCSeconds(data.data.colorings[0].blockTimestamp)
         const caller = data.data.colorings[0].caller.toString()
@@ -384,7 +403,6 @@ function dec2hex(str : string){ // .toString(16) only works up to 2^53
     return (
       <div className="pr-44">
               
-        {/* <div className=" overflow-auto"> */}
       <div className="p-2 bg-white overflow-scroll " style={{ 
           transform: "scale("+zoom+")" ,
           transformOrigin: "10% 10%",
@@ -397,19 +415,15 @@ function dec2hex(str : string){ // .toString(16) only works up to 2^53
           overflow: "hidden"
         }} 
          >
-                     {/* <canvas className="bg-blue-100" width={60} height={60}> </canvas> */}
 
          </canvas>
 
 
 
         </div>
-        {/* </div> */}
             {isInspect && pickcolor == 16 ?  (<Inspect inspect={isInspect} detail={detail}></Inspect>) : <></>}
       
-      {/* range */}
           <div className="flex flex-col">
-{/* <label htmlFor="steps-range" className="z-10 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Range steps</label> */}
 <input id="steps-range" type="range" min="1" max="19" value={zoom} onChange={event => setZoom(parseInt(event.target.value))} step="1" className="z-10 w-1/3  h-2 fixed bottom-10 left-1/2  transform  -translate-x-1/2  bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700"/>
 
           </div>

@@ -81,7 +81,7 @@ export interface ColorSystemInterface extends utils.Interface {
   ): Result;
 
   events: {
-    "Coloring(address,uint32,uint32,uint256,uint256,uint8)": EventFragment;
+    "Coloring(address,uint32,uint32,uint256,uint8)": EventFragment;
     "OwnershipTransferred(address,address)": EventFragment;
   };
 
@@ -94,11 +94,10 @@ export interface ColoringEventObject {
   x: number;
   y: number;
   entity: BigNumber;
-  timestamp: BigNumber;
   color: number;
 }
 export type ColoringEvent = TypedEvent<
-  [string, number, number, BigNumber, BigNumber, number],
+  [string, number, number, BigNumber, number],
   ColoringEventObject
 >;
 
@@ -201,12 +200,11 @@ export interface ColorSystem extends BaseContract {
   };
 
   filters: {
-    "Coloring(address,uint32,uint32,uint256,uint256,uint8)"(
+    "Coloring(address,uint32,uint32,uint256,uint8)"(
       caller?: null,
       x?: null,
       y?: null,
       entity?: null,
-      timestamp?: null,
       color?: null
     ): ColoringEventFilter;
     Coloring(
@@ -214,7 +212,6 @@ export interface ColorSystem extends BaseContract {
       x?: null,
       y?: null,
       entity?: null,
-      timestamp?: null,
       color?: null
     ): ColoringEventFilter;
 
