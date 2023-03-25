@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Card } from "./Card"
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { ethers } from "ethers";
+import { usedchain } from "./mud/config";
 
 export interface PlayerMetadata {
     address: string,
@@ -37,9 +38,9 @@ function apollo_query(addr: string){
     }catch{
         entity = "addr"
     }
-    
 
-    const APIURL = 'https://api.studio.thegraph.com/query/44126/demo-plac3/1'
+
+    const APIURL = usedchain.graphURL
     const query = `
     query($compo: String, $entity:String) {
         componentValueSets(first: 1 orderBy:blockTimestamp orderDirection:desc
