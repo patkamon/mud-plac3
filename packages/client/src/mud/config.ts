@@ -71,7 +71,7 @@ export const Gnosis:chainContracts ={
 }
 
 
-const chainid = (window as any).ethereum.networkVersion;
+const chainid = -1 || (window as any).ethereum.networkVersion;
 
 export const usedchain = chainid == 80001 ? Mumbai : chainid == 10 ? Optimism : chainid == 100 ? Gnosis : Lattice
 
