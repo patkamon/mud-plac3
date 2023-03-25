@@ -3,7 +3,10 @@ import { getBurnerWallet } from "./getBurnerWallet";
 
 const params = new URLSearchParams(window.location.search);
 
+
+
 export declare type chainContracts = {
+  graphURL?: string,
   chainId: number,
   worldAddress: string,
   colorSystemAddress: string,
@@ -12,6 +15,8 @@ export declare type chainContracts = {
   wss: string
   initialBlockNumber: number
 }
+
+
 
 export const Lattice:chainContracts = {
   worldAddress: "0xC8C8fFFdA9791A978478078Af96B68Ba170AC38e", // latticexyz
@@ -24,13 +29,24 @@ export const Lattice:chainContracts = {
 }
 
 export const Mumbai:chainContracts = {
-  worldAddress: "0x423dA7B583ED4D8fe7e2F4824bc6654B73beff91",
-  colorSystemAddress:  "0x3060B21CfAe6D0Cd8A52B7777D9a264d8196814e", 
+  graphURL: 'https://api.studio.thegraph.com/query/44126/demo-plac3/1.1',
+  worldAddress: "0x99d12D5cCA713517c10733FBF44De401a96Af356",
+  colorSystemAddress:  "0x40612C35d3AFC92C3b1e541F1cc8BeF6e5c1fD23", 
   chainId: 80001,
   isDev: "false",
   rpc: "https://polygon-mumbai.g.alchemy.com/v2/i0JIYxK_EGtBX5aGG1apX4KuoH7j_7dq",
   wss: "wss://polygon-mumbai.g.alchemy.com/v2/i0JIYxK_EGtBX5aGG1apX4KuoH7j_7dq",
-  initialBlockNumber: 33378841
+  initialBlockNumber: 33544015
+}
+
+export const Optimism:chainContracts = {
+  worldAddress: "0x5Ad8C2610D92870e37db9013FF8AE171E944C7c5",
+  colorSystemAddress:  "0x9189b5a063bd2fE1e38227EE6e888a8eAA0e081E", 
+  chainId: 10,
+  isDev: "false",
+  rpc: "https://opt-mainnet.g.alchemy.com/v2/XajVGvOXlQuwxZDV8OhZZsysww879C__",
+  wss: "wss://opt-mainnet.g.alchemy.com/v2/XajVGvOXlQuwxZDV8OhZZsysww879C__",
+  initialBlockNumber: 83587025
 }
 
 export const Local:chainContracts ={
@@ -43,7 +59,23 @@ export const Local:chainContracts ={
   initialBlockNumber: Number(params.get("initialBlockNumber")) || 0
 }
 
-export const usedchain = Mumbai;
+export const Gnosis:chainContracts ={
+  graphURL: "https://api.studio.thegraph.com/query/44126/plac3-gno/0.1",
+  worldAddress: "0x93a43cD27a63B2295F4Bc0154cADDF3af84f5FaF", 
+  colorSystemAddress:  "0x239303A4bB3a4e457E37921FCcB8a8A6795E84c4", 
+  chainId: 100,
+  isDev: "false",
+  rpc: "https://rpc.gnosischain.com/",
+  wss: "wss://rpc.gnosischain.com/wss",
+  initialBlockNumber: 27115236
+}
+
+
+const chainid = (window as any).ethereum.networkVersion;
+
+export const usedchain = chainid == 80001 ? Mumbai : chainid == 10 ? Optimism : chainid == 100 ? Gnosis : Lattice
+
+
 
 export const config: SetupContractConfig & { faucetServiceUrl?: string } = {
   clock: {

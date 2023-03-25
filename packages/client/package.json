@@ -27,6 +27,9 @@
   },
   "dependencies": {
     "@apollo/client": "^3.7.10",
+    "@fortawesome/fontawesome-svg-core": "^6.3.0",
+    "@fortawesome/free-solid-svg-icons": "^6.3.0",
+    "@fortawesome/react-fontawesome": "^0.2.0",
     "@improbable-eng/grpc-web": "^0.15.0",
     "@latticexyz/ecs-browser": "1.39.0",
     "@latticexyz/network": "1.39.0",

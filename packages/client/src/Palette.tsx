@@ -23,7 +23,8 @@ export const Palette = ({pickcolor, setcolor}: {pickcolor: number, setcolor : Re
               }}
             >
 
-                <div className="flex justify-center text-3xl mt-[2px]">{index == 16 ? "👆" : ""}</div>
+
+                <div className="flex justify-center">{index == 16 ? <img className="min-w-[2px] p-1" src="./search.png" /> : ""}</div>
             </div>
         })
         }
