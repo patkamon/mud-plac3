@@ -3,15 +3,21 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 //Wagmi
 import '@rainbow-me/rainbowkit/styles.css';
 import {
-  getDefaultWallets,
+  // getDefaultWallets,
+  connectorsForWallets,
   RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
 import { configureChains, createClient,  WagmiConfig } from 'wagmi';
-import { optimism, polygonMumbai, gnosis} from 'wagmi/chains';
+import { optimismGoerli, polygonMumbai, gnosis} from 'wagmi/chains';
 // import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import { Chain } from 'wagmi/chains';
 import { Place } from "./Place";
+
+import {
+  metaMaskWallet,
+} from '@rainbow-me/rainbowkit/wallets';
+
 
 
 
@@ -42,7 +48,7 @@ const LatticeChain: Chain = {
 
 
 const { chains, provider } = configureChains(
-  [optimism, gnosis, polygonMumbai , LatticeChain],
+  [gnosis, optimismGoerli,  polygonMumbai , LatticeChain],
   [
     // alchemyProvider({ alchemyId: process.env.ALCHEMY_ID }),
     publicProvider()
@@ -52,10 +58,19 @@ const { chains, provider } = configureChains(
 
 
 
-const { connectors } = getDefaultWallets({
-  appName: 'My RainbowKit App',
-  chains
-});
+// const { connectors } = getDefaultWallets({
+//   appName: 'My RainbowKit App',
+//   chains
+// });
+
+const connectors = connectorsForWallets([
+  {
+    groupName: 'Suggested',
+    wallets: [
+      metaMaskWallet({ chains })
+    ],
+  },
+]);
 
 const wagmiClient = createClient({
   autoConnect: true,

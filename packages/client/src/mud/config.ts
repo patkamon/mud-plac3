@@ -12,8 +12,9 @@ export declare type chainContracts = {
   colorSystemAddress: string,
   isDev: string,
   rpc: string,
-  wss: string
-  initialBlockNumber: number
+  wss: string,
+  initialBlockNumber: number,
+  playerCompo?: string
 }
 
 
@@ -36,17 +37,20 @@ export const Mumbai:chainContracts = {
   isDev: "false",
   rpc: "https://polygon-mumbai.g.alchemy.com/v2/i0JIYxK_EGtBX5aGG1apX4KuoH7j_7dq",
   wss: "wss://polygon-mumbai.g.alchemy.com/v2/i0JIYxK_EGtBX5aGG1apX4KuoH7j_7dq",
-  initialBlockNumber: 33544015
+  initialBlockNumber: 33544015,
+  playerCompo: "0x919b4DdFa95Ae46DAfE2DC90a9A309b979Ce0b0e"
 }
 
-export const Optimism:chainContracts = {
-  worldAddress: "0x5Ad8C2610D92870e37db9013FF8AE171E944C7c5",
-  colorSystemAddress:  "0x9189b5a063bd2fE1e38227EE6e888a8eAA0e081E", 
-  chainId: 10,
+export const OptimismG:chainContracts = {
+  graphURL: "https://api.studio.thegraph.com/query/44126/plac3-opt-goerli/1",
+  worldAddress: "0x179Ae487Af52987005298C457d63aEE34846fADC",
+  colorSystemAddress:  "0xE8A9A75050779E3a756FF70B63DE013a5ad5da69", 
+  chainId: 420,
   isDev: "false",
-  rpc: "https://opt-mainnet.g.alchemy.com/v2/XajVGvOXlQuwxZDV8OhZZsysww879C__",
-  wss: "wss://opt-mainnet.g.alchemy.com/v2/XajVGvOXlQuwxZDV8OhZZsysww879C__",
-  initialBlockNumber: 83587025
+  rpc: "https://opt-goerli.g.alchemy.com/v2/ntP1ouS6wLZKPDHTscanVmOJ9krFFHLs",
+  wss: "wss://opt-goerli.g.alchemy.com/v2/ntP1ouS6wLZKPDHTscanVmOJ9krFFHLs",
+  initialBlockNumber: 7200865,
+  playerCompo: "0xb6487e7D9e6A08EE1f926d578622998b217b614F"
 }
 
 export const Local:chainContracts ={
@@ -67,13 +71,19 @@ export const Gnosis:chainContracts ={
   isDev: "false",
   rpc: "https://rpc.gnosischain.com/",
   wss: "wss://rpc.gnosischain.com/wss",
-  initialBlockNumber: 27115236
+  initialBlockNumber: 27115236,
+  playerCompo: "0xa9fd39524650aB6c881B4709828dDF0A2314bDbF"
 }
 
 
-const chainid = (window as any).ethereum.networkVersion;
+let chainid 
+ try {
+  chainid =  (window as any).ethereum.networkVersion }
+  catch(err){
+   chainid = -1
+  } 
 
-export const usedchain = chainid == 80001 ? Mumbai : chainid == 10 ? Optimism : chainid == 100 ? Gnosis : Lattice
+export const usedchain = chainid == 80001 ? Mumbai : chainid == 420 ? OptimismG : chainid == 100 ? Gnosis : Lattice
 
 
 

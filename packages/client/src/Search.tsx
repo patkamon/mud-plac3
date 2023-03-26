@@ -2,6 +2,7 @@ import { useState } from "react"
 import { Card } from "./Card"
 import { ApolloClient, InMemoryCache, gql } from "@apollo/client";
 import { ethers } from "ethers";
+import { usedchain } from "./mud/config";
 
 export interface PlayerMetadata {
     address: string,
@@ -37,13 +38,13 @@ function apollo_query(addr: string){
     }catch{
         entity = "addr"
     }
-    
 
-    const APIURL = 'https://api.studio.thegraph.com/query/44126/demo-plac3/1'
+
+    const APIURL = usedchain.graphURL
     const query = `
     query($compo: String, $entity:String) {
         componentValueSets(first: 1 orderBy:blockTimestamp orderDirection:desc
-            where:{component: $compo 
+            where:{ component: $compo 
               entity: $entity 
           }
         ) {
@@ -63,7 +64,7 @@ function apollo_query(addr: string){
     .query({
       query: gql(query),
       variables:{
-        compo: "0x7d731fcb6d6732c0572f82d888a685cc0ff6834c",
+        compo: usedchain.playerCompo,
         entity: entity
       }
     }).then((data)=>{

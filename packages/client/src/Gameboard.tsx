@@ -80,9 +80,12 @@ export const GameBoard = ({pickcolor}: {pickcolor: number}) => {
       await (window as any).ethereum.request({ method: "eth_requestAccounts" });
     }
 
-    (window as any).ethereum.on('chainChanged', () => {
-      window.location.reload();
-    });
+    if ((window as any).ethereum!== undefined){
+      (window as any).ethereum.on('chainChanged', () => {
+        window.location.reload();
+      });
+    }
+
 
     async function delegate(event: any){
       onClickProduct(event)
